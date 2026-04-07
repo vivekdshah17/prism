@@ -927,6 +927,74 @@ body {
 @media(max-width:600px){ .hide-m { display: none; } }
 
 /* ══════════════════════════════════════
+   TRADES PAGE
+   ══════════════════════════════════════ */
+.market-status-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.market-pill{display:flex;align-items:center;gap:6px;background:var(--white);border:1px solid var(--grey-200);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;}
+.market-pill-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.market-pill-dot.open{background:var(--buy);box-shadow:0 0 4px rgba(13,127,79,0.4);}
+.market-pill-dot.closed{background:var(--grey-300);}
+.market-pill-name{color:var(--grey-700);font-family:var(--mono);font-size:10px;font-weight:600;}
+.market-pill-hours{color:var(--grey-400);font-size:9px;margin-left:2px;}
+
+.trades-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:560px){.trades-summary{grid-template-columns:repeat(2,1fr);}}
+.trade-stat{background:var(--white);border:1px solid var(--grey-200);border-radius:var(--radius-lg);padding:16px;text-align:center;box-shadow:var(--shadow-sm);}
+.trade-stat-label{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--grey-400);margin-bottom:8px;}
+.trade-stat-val{font-family:var(--serif);font-size:26px;color:var(--grey-900);}
+.trade-stat-val.profit{color:var(--buy);}
+.trade-stat-val.loss{color:var(--sell);}
+
+.trades-section-title{font-family:var(--serif);font-size:20px;color:var(--grey-900);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.trades-section-badge{font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 10px;border-radius:10px;background:var(--accent-light);color:var(--accent);}
+
+.trade-card{background:var(--white);border:1px solid var(--grey-200);border-radius:var(--radius-lg);padding:18px;margin-bottom:12px;box-shadow:var(--shadow-sm);transition:box-shadow 0.2s;}
+.trade-card:hover{box-shadow:var(--shadow);}
+.trade-card.long-card{border-left:3px solid var(--buy);}
+.trade-card.short-card{border-left:3px solid var(--sell);}
+.trade-card.win-card{border-left:3px solid var(--buy);}
+.trade-card.loss-card{border-left:3px solid var(--sell);}
+
+.trade-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.trade-card-left{}
+.trade-symbol{font-family:var(--serif);font-size:20px;color:var(--grey-900);}
+.trade-meta{font-size:11px;color:var(--grey-400);margin-top:2px;font-family:var(--mono);}
+.trade-direction{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.trade-direction.long{color:var(--buy);}
+.trade-direction.short{color:var(--sell);}
+
+.trade-levels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
+@media(max-width:480px){.trade-levels{grid-template-columns:repeat(2,1fr);}}
+.trade-level{background:var(--grey-50);border-radius:6px;padding:8px;}
+.trade-level-label{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--grey-400);margin-bottom:4px;}
+.trade-level-val{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--grey-800);}
+
+.trade-pnl-row{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--grey-100);}
+.trade-pnl{font-family:var(--serif);font-size:20px;}
+.trade-pnl.positive{color:var(--buy);}
+.trade-pnl.negative{color:var(--sell);}
+.trade-pnl.neutral{color:var(--grey-500);}
+.trade-pnl-pct{font-size:12px;margin-left:6px;font-family:var(--mono);}
+
+.trade-close-btn{background:var(--white);border:1px solid var(--grey-200);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--grey-600);cursor:pointer;transition:all 0.15s;font-family:var(--sans);}
+.trade-close-btn:hover{border-color:var(--sell);color:var(--sell);}
+
+.trades-empty{text-align:center;padding:48px 20px;font-family:var(--mono);font-size:12px;color:var(--grey-400);}
+.trades-empty-title{font-family:var(--serif);font-size:20px;color:var(--grey-600);margin-bottom:8px;}
+
+.close-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:500;align-items:center;justify-content:center;}
+.close-modal.show{display:flex;}
+.close-modal-box{background:var(--white);border-radius:var(--radius-lg);padding:28px;width:340px;box-shadow:var(--shadow-lg);}
+.close-modal-title{font-family:var(--serif);font-size:20px;color:var(--grey-900);margin-bottom:16px;}
+.close-modal-input{width:100%;background:var(--grey-50);border:1px solid var(--grey-200);border-radius:var(--radius);padding:10px 14px;font-family:var(--mono);font-size:14px;color:var(--grey-800);outline:none;margin-bottom:8px;}
+.close-modal-input:focus{border-color:var(--accent);}
+.close-modal-label{font-size:11px;font-weight:600;color:var(--grey-500);margin-bottom:6px;display:block;}
+.close-modal-select{width:100%;background:var(--grey-50);border:1px solid var(--grey-200);border-radius:var(--radius);padding:10px 14px;font-family:var(--sans);font-size:13px;color:var(--grey-800);outline:none;margin-bottom:16px;}
+.close-modal-btns{display:flex;gap:10px;}
+.close-modal-confirm{flex:1;background:var(--sell);color:var(--white);border:none;border-radius:var(--radius);padding:10px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;}
+.close-modal-cancel{flex:1;background:var(--grey-100);color:var(--grey-600);border:none;border-radius:var(--radius);padding:10px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;}
+
+/* ══════════════════════════════════════
    SCREENER PAGE
    ══════════════════════════════════════ */
 .scan-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);border:none;border-radius:var(--radius);padding:10px 20px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
@@ -996,6 +1064,7 @@ body {
     <button class="nav-link active" id="nav-analyze"   onclick="showPage('analyze',this)">Analyze</button>
     <button class="nav-link"        id="nav-screener"  onclick="showPage('screener',this)">Screener</button>
     <button class="nav-link"        id="nav-watchlist" onclick="showPage('watchlist',this)">Watchlist</button>
+    <button class="nav-link"        id="nav-trades"    onclick="showPage('trades',this)">Trades</button>
     <button class="nav-link"        id="nav-history"   onclick="showPage('history',this)">History</button>
   </div>
 </nav>
@@ -1505,6 +1574,7 @@ function showPage(name,btn){
   if(name==='history') loadHistory();
   if(name==='watchlist') renderWl();
   if(name==='screener') initScreener();
+  if(name==='trades') loadTrades();
 }
 
 /* ── TYPE ── */
@@ -1776,6 +1846,10 @@ function renderResult(d){
 
   document.getElementById('result').style.display='block';
   document.getElementById('result').classList.add('show');
+  // Auto-log BUY/SELL signals
+  if (d.signal.verdict === 'BUY' || d.signal.verdict === 'SELL') {
+    autoLogTrade(d);
+  }
 }
 
 /* ── POSITION SIZING ── */
@@ -1926,6 +2000,177 @@ function renderHistory(){
 }
 
 setInterval(()=>{if(document.getElementById('page-history').classList.contains('active'))loadHistory();},60000);
+
+/* ── PAPER TRADES ── */
+let currentCloseTradeId = null;
+
+async function loadTrades() {
+  try {
+    const [mktRes, openRes, closedRes] = await Promise.all([
+      fetch(`${API_BASE}/trades/market-status`),
+      fetch(`${API_BASE}/trades/open`),
+      fetch(`${API_BASE}/trades/closed`)
+    ]);
+    const mkt    = await mktRes.json();
+    const open   = await openRes.json();
+    const closed = await closedRes.json();
+
+    renderMarketStatus(mkt);
+    renderOpenTrades(open.trades || []);
+    renderClosedTrades(closed);
+
+    document.getElementById('tr-open-count').textContent   = open.count || 0;
+    document.getElementById('tr-closed-count').textContent = closed.total || 0;
+    const pnl = closed.total_pnl || 0;
+    const pnlEl = document.getElementById('tr-total-pnl');
+    pnlEl.textContent = (pnl >= 0 ? '+' : '') + fmt(pnl, 2);
+    pnlEl.className = 'trade-stat-val ' + (pnl > 0 ? 'profit' : pnl < 0 ? 'loss' : '');
+    document.getElementById('tr-win-rate').textContent = (closed.win_rate || 0) + '%';
+  } catch(e) {
+    console.error('Trades load error:', e);
+  }
+}
+
+function renderMarketStatus(mkt) {
+  const row = document.getElementById('market-status-row');
+  row.innerHTML = Object.entries(mkt).map(([type, info]) => `
+    <div class="market-pill">
+      <span class="market-pill-dot ${info.open ? 'open' : 'closed'}"></span>
+      <span class="market-pill-name">${type}</span>
+      <span class="market-pill-hours">${info.open ? '● OPEN' : info.hours}</span>
+    </div>`).join('');
+}
+
+function renderOpenTrades(trades) {
+  const container = document.getElementById('open-trades-container');
+  document.getElementById('open-badge').textContent = trades.length;
+  if (!trades.length) {
+    container.innerHTML = '<div class="trades-empty"><div class="trades-empty-title">No open trades</div>Run an analysis to get started</div>';
+    return;
+  }
+  container.innerHTML = trades.map(t => {
+    const isLong  = t.direction === 'BUY';
+    const dec     = t.entry < 10 ? 4 : t.entry < 1000 ? 2 : 0;
+    const upnl    = t.unrealized_pnl || 0;
+    const upnlPct = t.unrealized_pnl_pct || 0;
+    const pnlClass = upnl > 0 ? 'positive' : upnl < 0 ? 'negative' : 'neutral';
+    return `<div class="trade-card ${isLong ? 'long' : 'short'}-card">
+      <div class="trade-card-header">
+        <div class="trade-card-left">
+          <div class="trade-symbol">${t.symbol}</div>
+          <div class="trade-meta">${t.type} · ${t.entry_time} · Conv: ${t.conviction}/10</div>
+        </div>
+        <div class="trade-direction ${isLong ? 'long' : 'short'}">${isLong ? '▲ LONG' : '▼ SHORT'}</div>
+      </div>
+      <div class="trade-levels">
+        <div class="trade-level"><div class="trade-level-label">Entry</div><div class="trade-level-val">${fmt(t.entry,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label" style="color:var(--sell)">Stop Loss</div><div class="trade-level-val" style="color:var(--sell)">${fmt(t.sl,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label" style="color:var(--buy)">Target 1</div><div class="trade-level-val" style="color:var(--buy)">${fmt(t.t1,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label" style="color:var(--buy)">Target 2</div><div class="trade-level-val" style="color:var(--buy);opacity:0.7">${fmt(t.t2,dec)}</div></div>
+      </div>
+      <div class="trade-pnl-row">
+        <div>
+          <span class="trade-pnl ${pnlClass}">${upnl >= 0 ? '+' : ''}${fmt(upnl,2)}</span>
+          <span class="trade-pnl-pct" style="color:${upnl>=0?'var(--buy)':'var(--sell)'}">(${upnlPct >= 0?'+':''}${upnlPct}%)</span>
+          <span style="font-size:10px;color:var(--grey-400);margin-left:8px">Unrealized · Lot: ${t.lot_size || 1}</span>
+        </div>
+        <button class="trade-close-btn" onclick="openCloseModal('${t.trade_id}',${t.entry})">Close Trade</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderClosedTrades(summary) {
+  const container = document.getElementById('closed-trades-container');
+  document.getElementById('closed-badge').textContent = summary.total || 0;
+  const trades = summary.trades || [];
+  if (!trades.length) {
+    container.innerHTML = '<div class="trades-empty"><div class="trades-empty-title">No closed trades yet</div></div>';
+    return;
+  }
+  container.innerHTML = [...trades].reverse().map(t => {
+    const isWin = t.result === 'WIN';
+    const dec   = t.entry < 10 ? 4 : t.entry < 1000 ? 2 : 0;
+    const pnl   = t.pnl || 0;
+    return `<div class="trade-card ${isWin ? 'win' : 'loss'}-card">
+      <div class="trade-card-header">
+        <div class="trade-card-left">
+          <div class="trade-symbol">${t.symbol}</div>
+          <div class="trade-meta">${t.type} · Entry: ${t.entry_time} · Exit: ${t.exit_time} · ${t.exit_reason}</div>
+        </div>
+        <span class="v-badge ${isWin ? 'buy' : 'sell'}">${t.result}</span>
+      </div>
+      <div class="trade-levels">
+        <div class="trade-level"><div class="trade-level-label">Entry</div><div class="trade-level-val">${fmt(t.entry,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label">Exit</div><div class="trade-level-val">${fmt(t.exit_price,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label" style="color:var(--sell)">Stop Loss</div><div class="trade-level-val" style="color:var(--sell)">${fmt(t.sl,dec)}</div></div>
+        <div class="trade-level"><div class="trade-level-label" style="color:var(--buy)">Target 1</div><div class="trade-level-val" style="color:var(--buy)">${fmt(t.t1,dec)}</div></div>
+      </div>
+      <div class="trade-pnl-row">
+        <div>
+          <span class="trade-pnl ${isWin?'positive':'negative'}">${pnl>=0?'+':''}${fmt(pnl,2)}</span>
+          <span class="trade-pnl-pct" style="color:${isWin?'var(--buy)':'var(--sell)'}">(${t.pnl_pct>=0?'+':''}${t.pnl_pct}%)</span>
+          <span style="font-size:10px;color:var(--grey-400);margin-left:8px">Realized · Lot: ${t.lot_size || 1}</span>
+        </div>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--grey-400)">Conv: ${t.conviction}/10</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openCloseModal(tradeId, entryPrice) {
+  currentCloseTradeId = tradeId;
+  document.getElementById('exit-price-input').value = entryPrice;
+  document.getElementById('close-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('close-modal').classList.remove('show');
+  currentCloseTradeId = null;
+}
+
+async function confirmCloseTrade() {
+  const exitPrice  = parseFloat(document.getElementById('exit-price-input').value);
+  const exitReason = document.getElementById('exit-reason-select').value;
+  if (!exitPrice || !currentCloseTradeId) return;
+  try {
+    await fetch(`${API_BASE}/trades/close/${currentCloseTradeId}?exit_price=${exitPrice}&exit_reason=${exitReason}`, {method:'POST'});
+    closeModal();
+    loadTrades();
+  } catch(e) { console.error(e); }
+}
+
+// Auto-log trade silently
+async function autoLogTrade(signalData) {
+  try {
+    const res = await fetch(`${API_BASE}/trades/log`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(signalData)
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Show subtle notification
+      showTradeNotification(`📋 Trade logged: ${signalData.instrument.symbol} ${signalData.signal.verdict}`);
+    }
+    // If market closed or duplicate — silently ignore
+  } catch(e) {
+    console.log('Auto-log skipped:', e.message);
+  }
+}
+
+function showTradeNotification(msg) {
+  const n = document.createElement('div');
+  n.style.cssText = 'position:fixed;bottom:24px;right:24px;background:var(--grey-800);color:white;padding:12px 18px;border-radius:8px;font-size:12px;font-family:var(--mono);z-index:999;box-shadow:0 4px 16px rgba(0,0,0,0.2);animation:fadeUp 0.3s ease';
+  n.textContent = msg;
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 3500);
+}
+
+setInterval(() => {
+  if (document.getElementById('page-trades').classList.contains('active')) loadTrades();
+}, 30000);
+
 
 
 /* ── SCREENER ── */
@@ -2166,5 +2411,67 @@ document.addEventListener('DOMContentLoaded',()=>{
   setType('NSE');
 });
 </script>
+<!-- ══ TRADES PAGE ══ -->
+<div class="page" id="page-trades">
+<div class="container">
+  <div class="page-header">
+    <div class="page-title">Paper Trades</div>
+    <div class="page-sub">Auto-logged BUY/SELL signals · Live unrealized P&L · Market hours enforced</div>
+  </div>
+
+  <!-- Market Status -->
+  <div class="market-status-row" id="market-status-row">
+    <div class="market-pill"><span class="market-pill-dot"></span><span class="market-pill-name">Loading...</span></div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="trades-summary">
+    <div class="trade-stat"><div class="trade-stat-label">Open Trades</div><div class="trade-stat-val" id="tr-open-count">—</div></div>
+    <div class="trade-stat"><div class="trade-stat-label">Closed Trades</div><div class="trade-stat-val" id="tr-closed-count">—</div></div>
+    <div class="trade-stat"><div class="trade-stat-label">Total P&L</div><div class="trade-stat-val" id="tr-total-pnl">—</div></div>
+    <div class="trade-stat"><div class="trade-stat-label">Win Rate</div><div class="trade-stat-val" id="tr-win-rate">—</div></div>
+  </div>
+
+  <!-- Open Trades -->
+  <div class="trades-section-title">
+    Open Trades <span class="trades-section-badge" id="open-badge">0</span>
+  </div>
+  <div id="open-trades-container">
+    <div class="trades-empty"><div class="trades-empty-title">No open trades</div>Run an analysis and log a trade to get started</div>
+  </div>
+
+  <div style="margin-top:32px"></div>
+
+  <!-- Closed Trades -->
+  <div class="trades-section-title">
+    Closed Trades <span class="trades-section-badge" id="closed-badge">0</span>
+  </div>
+  <div id="closed-trades-container">
+    <div class="trades-empty"><div class="trades-empty-title">No closed trades yet</div></div>
+  </div>
+</div>
+</div>
+
+<!-- Close Trade Modal -->
+<div class="close-modal" id="close-modal">
+  <div class="close-modal-box">
+    <div class="close-modal-title">Close Trade</div>
+    <label class="close-modal-label">Exit Price</label>
+    <input type="number" class="close-modal-input" id="exit-price-input" placeholder="Enter exit price" step="0.01">
+    <label class="close-modal-label">Exit Reason</label>
+    <select class="close-modal-select" id="exit-reason-select">
+      <option value="MANUAL">Manual Close</option>
+      <option value="SL_HIT">Stop Loss Hit</option>
+      <option value="T1_HIT">Target 1 Hit</option>
+      <option value="T2_HIT">Target 2 Hit</option>
+      <option value="EOD">End of Day</option>
+    </select>
+    <div class="close-modal-btns">
+      <button class="close-modal-confirm" onclick="confirmCloseTrade()">Close Trade</button>
+      <button class="close-modal-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
