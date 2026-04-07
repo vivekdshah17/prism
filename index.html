@@ -925,6 +925,63 @@ body {
 .h-empty  { text-align: center; padding: 60px; font-size: 13px; color: var(--grey-400); }
 .h-loading{ text-align: center; padding: 40px; font-size: 12px; color: var(--grey-400); font-family: var(--mono); }
 @media(max-width:600px){ .hide-m { display: none; } }
+
+/* ══════════════════════════════════════
+   SCREENER PAGE
+   ══════════════════════════════════════ */
+.scan-btn{display:flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);border:none;border-radius:var(--radius);padding:10px 20px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.scan-btn:hover:not(:disabled){background:#1648c7;box-shadow:0 4px 12px rgba(26,86,219,0.3);transform:translateY(-1px);}
+.scan-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.scan-status-bar{background:var(--white);border:1px solid var(--grey-200);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:var(--shadow-sm);}
+.scan-status-left{display:flex;align-items:center;gap:10px;}
+.scan-dot{width:8px;height:8px;border-radius:50%;background:var(--grey-300);flex-shrink:0;}
+.scan-dot.running{background:var(--accent);animation:blink 1s ease infinite;}
+.scan-dot.done{background:var(--buy);}
+.scan-dot.error{background:var(--sell);}
+.scan-status-text{font-size:13px;color:var(--grey-700);font-weight:500;}
+.scan-status-sub{font-size:11px;color:var(--grey-400);font-family:var(--mono);}
+.scan-prog-wrap{flex:1;max-width:200px;}
+.scan-prog-track{height:4px;background:var(--grey-100);border-radius:2px;overflow:hidden;}
+.scan-prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.5s ease;width:0%;}
+.scan-prog-label{font-size:10px;color:var(--grey-400);margin-top:4px;font-family:var(--mono);}
+.auth-notice{background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:var(--radius);padding:16px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.auth-notice-text{font-size:13px;color:var(--warn);font-weight:500;}
+.auth-link{background:var(--warn);color:var(--white);padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap;}
+.screener-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:560px){.screener-stats{grid-template-columns:repeat(2,1fr);}}
+.screener-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+.toolbar-label{font-size:11px;font-weight:600;color:var(--grey-400);}
+.toolbar-btn{padding:6px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.15s;border:1px solid var(--grey-200);background:var(--white);color:var(--grey-500);font-family:var(--sans);}
+.toolbar-btn:hover{border-color:var(--grey-300);color:var(--grey-700);}
+.toolbar-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-light);font-weight:600;}
+.toolbar-btn.buy-active{border-color:var(--buy-border);color:var(--buy);background:var(--buy-bg);}
+.toolbar-btn.sell-active{border-color:var(--sell-border);color:var(--sell);background:var(--sell-bg);}
+.toolbar-btn.high-active{border-color:#c084fc;color:#7c3aed;background:#faf5ff;}
+.screener-table-wrap{background:var(--white);border:1px solid var(--grey-200);border-radius:var(--radius-lg);overflow:hidden;overflow-x:auto;box-shadow:var(--shadow-sm);}
+.screener-table{width:100%;border-collapse:collapse;}
+.screener-table th{font-size:10px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--grey-400);padding:12px 14px;text-align:left;border-bottom:1px solid var(--grey-200);background:var(--grey-50);white-space:nowrap;cursor:pointer;user-select:none;}
+.screener-table th:hover{color:var(--grey-700);}
+.screener-table td{padding:11px 14px;border-bottom:1px solid var(--grey-100);font-size:12px;color:var(--grey-700);vertical-align:middle;white-space:nowrap;}
+.screener-table tr:hover td{background:var(--grey-50);cursor:pointer;}
+.screener-table tr:last-child td{border-bottom:none;}
+/* ── CONVICTION GAUGE ── */
+.c-gauge{display:flex;align-items:center;gap:8px;min-width:130px;}
+.g-track{flex:1;height:6px;background:var(--grey-100);border-radius:3px;overflow:hidden;border:1px solid var(--grey-200);}
+.g-fill{height:100%;border-radius:3px;transition:width 0.8s cubic-bezier(0.16,1,0.3,1);}
+.g-fill.high{background:linear-gradient(90deg,#0d7f4f,#10d98c);}
+.g-fill.moderate{background:linear-gradient(90deg,#1648c7,#1a56db);}
+.g-fill.low{background:linear-gradient(90deg,#9b1c1c,#c0392b);}
+.g-score{font-family:var(--mono);font-size:12px;font-weight:600;min-width:28px;text-align:right;}
+.g-score.high{color:var(--buy);}
+.g-score.moderate{color:var(--accent);}
+.g-score.low{color:var(--sell);}
+.sym-cell{display:flex;flex-direction:column;}
+.sym-name{font-weight:700;color:var(--grey-800);font-family:var(--mono);font-size:13px;}
+.sym-sub{font-size:10px;color:var(--grey-400);margin-top:1px;}
+.screener-empty{text-align:center;padding:60px 20px;}
+.screener-empty-icon{font-size:36px;margin-bottom:12px;}
+.screener-empty-title{font-family:var(--serif);font-size:20px;color:var(--grey-700);margin-bottom:6px;}
+.screener-empty-sub{font-size:13px;color:var(--grey-400);}
 </style>
 </head>
 <body>
@@ -937,6 +994,7 @@ body {
   </div>
   <div class="nav-links">
     <button class="nav-link active" id="nav-analyze"   onclick="showPage('analyze',this)">Analyze</button>
+    <button class="nav-link"        id="nav-screener"  onclick="showPage('screener',this)">Screener</button>
     <button class="nav-link"        id="nav-watchlist" onclick="showPage('watchlist',this)">Watchlist</button>
     <button class="nav-link"        id="nav-history"   onclick="showPage('history',this)">History</button>
   </div>
@@ -1129,6 +1187,95 @@ body {
     </div>
   </div>
 
+</div>
+</div>
+
+
+<!-- ══ SCREENER ══ -->
+<div class="page" id="page-screener">
+<div class="container">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div class="page-title">Stock Screener</div>
+      <div class="page-sub">NSE/BSE stocks filtered by PRISM signal engine · 300+ liquid stocks · Auto-scans every 4 hours</div>
+    </div>
+    <button class="scan-btn" id="scan-now-btn" onclick="triggerScan()">
+      <span id="scan-icon">⟳</span> Scan Now
+    </button>
+  </div>
+
+  <!-- Auth notice -->
+  <div class="auth-notice" id="auth-notice" style="display:none">
+    <span class="auth-notice-text">⚠ Upstox login required to run screener</span>
+    <a href="https://api.prism-signal.in/upstox/login" target="_blank" class="auth-link">Login with Upstox →</a>
+  </div>
+
+  <!-- Scan status -->
+  <div class="scan-status-bar" id="scan-status-bar">
+    <div class="scan-status-left">
+      <span class="scan-dot" id="scan-dot"></span>
+      <div>
+        <div class="scan-status-text" id="scan-status-text">Not yet scanned</div>
+        <div class="scan-status-sub" id="scan-status-sub">Click "Scan Now" to run analysis</div>
+      </div>
+    </div>
+    <div class="scan-prog-wrap" id="scan-prog-wrap" style="display:none">
+      <div class="scan-prog-track"><div class="scan-prog-fill" id="scan-prog-fill"></div></div>
+      <div class="scan-prog-label" id="scan-prog-label">0 / 0</div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="screener-stats" id="screener-stats" style="display:none">
+    <div class="stat-box"><div class="stat-label">Scanned</div><div class="stat-val" id="sc-total">—</div></div>
+    <div class="stat-box"><div class="stat-label">Buy Signals</div><div class="stat-val buy-c" id="sc-buys">—</div></div>
+    <div class="stat-box"><div class="stat-label">Sell Signals</div><div class="stat-val sell-c" id="sc-sells">—</div></div>
+    <div class="stat-box"><div class="stat-label">High Conviction</div><div class="stat-val" style="color:#7c3aed" id="sc-high">—</div></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="screener-toolbar">
+    <span class="toolbar-label">Filter:</span>
+    <button class="toolbar-btn active" onclick="setScFilter('ALL',this)">All</button>
+    <button class="toolbar-btn" onclick="setScFilter('BUY',this)">Buy Only</button>
+    <button class="toolbar-btn" onclick="setScFilter('SELL',this)">Sell Only</button>
+    <button class="toolbar-btn" onclick="setScFilter('HIGH',this)">High Conviction (7+)</button>
+    <span class="toolbar-label" style="margin-left:8px">Sort:</span>
+    <button class="toolbar-btn active" onclick="setScSort('conviction',this)">Conviction</button>
+    <button class="toolbar-btn" onclick="setScSort('rr',this)">R:R Ratio</button>
+    <button class="toolbar-btn" onclick="setScSort('sl_distance',this)">SL Distance</button>
+  </div>
+
+  <!-- Table -->
+  <div class="screener-table-wrap">
+    <div class="screener-empty" id="sc-empty">
+      <div class="screener-empty-icon">📊</div>
+      <div class="screener-empty-title">No scan results yet</div>
+      <div class="screener-empty-sub">Click "Scan Now" to analyse 300+ NSE stocks</div>
+    </div>
+    <table class="screener-table" id="sc-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>LTP</th>
+          <th>Verdict</th>
+          <th>Conviction</th>
+          <th>Entry</th>
+          <th class="hide-m">Stop Loss</th>
+          <th class="hide-m">Target 1</th>
+          <th class="hide-m">Target 2</th>
+          <th>R:R</th>
+          <th class="hide-m">Regime</th>
+          <th class="hide-m">Bias</th>
+        </tr>
+      </thead>
+      <tbody id="sc-tbody"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:12px;font-size:11px;color:var(--grey-300);text-align:right;font-family:var(--mono);">
+    Auto-scans every 4 hours · Status auto-updates every 10s during scan · Click any row to analyze
+  </div>
 </div>
 </div>
 
@@ -1349,6 +1496,7 @@ function showPage(name,btn){
   if(btn) btn.classList.add('active');
   if(name==='history') loadHistory();
   if(name==='watchlist') renderWl();
+  if(name==='screener') initScreener();
 }
 
 /* ── TYPE ── */
@@ -1771,11 +1919,216 @@ function renderHistory(){
 
 setInterval(()=>{if(document.getElementById('page-history').classList.contains('active'))loadHistory();},60000);
 
+
+/* ── SCREENER ── */
+let scFilter = 'ALL', scSort = 'conviction', scResults = [], scPollTimer = null;
+
+function setScFilter(f, btn) {
+  scFilter = f;
+  document.querySelectorAll('.screener-toolbar .toolbar-btn').forEach(b => {
+    if (['All','Buy Only','Sell Only','High Conviction (7+)'].includes(b.textContent))
+      b.className = 'toolbar-btn';
+  });
+  btn.className = 'toolbar-btn ' + (f==='BUY'?'buy-active':f==='SELL'?'sell-active':f==='HIGH'?'high-active':'active');
+  renderScreener();
+}
+
+function setScSort(s, btn) {
+  scSort = s;
+  document.querySelectorAll('.screener-toolbar .toolbar-btn').forEach(b => {
+    if (['Conviction','R:R Ratio','SL Distance'].includes(b.textContent))
+      b.className = 'toolbar-btn';
+  });
+  btn.className = 'toolbar-btn active';
+  renderScreener();
+}
+
+async function triggerScan() {
+  const btn = document.getElementById('scan-now-btn');
+  btn.disabled = true;
+  try {
+    const res = await fetch(`${API_BASE}/screener/run`, {method:'POST'});
+    const data = await res.json();
+    if (data.error) {
+      document.getElementById('auth-notice').style.display = 'flex';
+      btn.disabled = false;
+      return;
+    }
+    document.getElementById('auth-notice').style.display = 'none';
+    startScPoll();
+  } catch(e) {
+    btn.disabled = false;
+  }
+}
+
+function startScPoll() {
+  if (scPollTimer) clearInterval(scPollTimer);
+  scPollTimer = setInterval(updateScStatus, 3000);
+  updateScStatus();
+}
+
+async function updateScStatus() {
+  try {
+    const res = await fetch(`${API_BASE}/screener/status`);
+    const s = await res.json();
+
+    const dot = document.getElementById('scan-dot');
+    const text = document.getElementById('scan-status-text');
+    const sub = document.getElementById('scan-status-sub');
+    const prog = document.getElementById('scan-prog-wrap');
+    const fill = document.getElementById('scan-prog-fill');
+    const label = document.getElementById('scan-prog-label');
+    const btn = document.getElementById('scan-now-btn');
+
+    if (s.running) {
+      dot.className = 'scan-dot running';
+      text.textContent = 'Scanning... ' + (s.current_symbol || '');
+      sub.textContent = 'Triggered by: ' + (s.triggered_by || 'manual');
+      prog.style.display = 'block';
+      const pct = s.total > 0 ? (s.progress / s.total * 100) : 0;
+      fill.style.width = pct + '%';
+      label.textContent = s.progress + ' / ' + s.total + ' stocks';
+      btn.disabled = true;
+    } else {
+      dot.className = 'scan-dot ' + (s.last_run ? 'done' : '');
+      if (s.last_run) {
+        const dt = new Date(s.last_run);
+        text.textContent = 'Last scan: ' + dt.toLocaleString('en-IN', {hour12:true});
+        sub.textContent = s.total_scanned + ' stocks · ' + s.buy_count + ' buys · ' + s.sell_count + ' sells · Next: ' +
+          (s.next_run ? new Date(s.next_run).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true}) : '—');
+        prog.style.display = 'none';
+        loadScreenerResults();
+      }
+      btn.disabled = false;
+      if (scPollTimer && !s.running) {
+        clearInterval(scPollTimer);
+        scPollTimer = null;
+      }
+    }
+
+    if (s.error) {
+      dot.className = 'scan-dot error';
+      text.textContent = 'Error: ' + s.error;
+      document.getElementById('auth-notice').style.display = 'flex';
+    }
+  } catch(e) {}
+}
+
+async function loadScreenerResults() {
+  try {
+    const res = await fetch(`${API_BASE}/screener/results?limit=300`);
+    const data = await res.json();
+    scResults = data.results || [];
+
+    const s = data.status || {};
+    const highConv = scResults.filter(r => r.conviction_score >= 7).length;
+
+    document.getElementById('screener-stats').style.display = 'grid';
+    document.getElementById('sc-total').textContent  = s.total_scanned || scResults.length;
+    document.getElementById('sc-buys').textContent   = s.buy_count  || scResults.filter(r=>r.verdict==='BUY').length;
+    document.getElementById('sc-sells').textContent  = s.sell_count || scResults.filter(r=>r.verdict==='SELL').length;
+    document.getElementById('sc-high').textContent   = highConv;
+
+    renderScreener();
+  } catch(e) {}
+}
+
+function renderScreener() {
+  let results = [...scResults];
+
+  // Filter
+  if (scFilter === 'BUY')  results = results.filter(r => r.verdict === 'BUY');
+  if (scFilter === 'SELL') results = results.filter(r => r.verdict === 'SELL');
+  if (scFilter === 'HIGH') results = results.filter(r => r.conviction_score >= 7);
+
+  // Sort
+  if (scSort === 'conviction') results.sort((a,b) => b.conviction_score - a.conviction_score);
+  if (scSort === 'rr')         results.sort((a,b) => (b.rr||0) - (a.rr||0));
+  if (scSort === 'sl_distance') results.sort((a,b) => (a.sl_distance_pct||99) - (b.sl_distance_pct||99));
+
+  const empty = document.getElementById('sc-empty');
+  const table = document.getElementById('sc-table');
+
+  if (!results.length) {
+    empty.style.display = 'block';
+    table.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  table.style.display = 'table';
+
+  const dec = (ltp) => ltp < 10 ? 4 : ltp < 1000 ? 2 : 0;
+
+  document.getElementById('sc-tbody').innerHTML = results.map(r => {
+    const vc  = r.verdict === 'NO_TRADE' ? 'protected' : r.verdict.toLowerCase();
+    const vl  = r.verdict === 'NO_TRADE' ? 'Protected' : r.verdict.replace('_',' ');
+    const d   = dec(r.ltp);
+    const cl  = r.conviction_score >= 7 ? 'high' : r.conviction_score >= 4 ? 'moderate' : 'low';
+    const pct = Math.round(r.conviction_score * 10);
+
+    return `<tr onclick="drillDown('${r.symbol}')">
+      <td><div class="sym-cell"><span class="sym-name">${r.symbol}</span><span class="sym-sub">${r.regime||''}</span></div></td>
+      <td style="font-family:var(--mono);font-weight:500">${fmt(r.ltp,d)}</td>
+      <td><span class="v-badge ${vc}">${vl}</span></td>
+      <td>
+        <div class="c-gauge">
+          <div class="g-track"><div class="g-fill ${cl}" style="width:${pct}%"></div></div>
+          <span class="g-score ${cl}">${r.conviction_score}/10</span>
+        </div>
+      </td>
+      <td style="font-family:var(--mono)">${fmt(r.ltp,d)}</td>
+      <td class="hide-m" style="color:var(--sell);font-family:var(--mono)">${fmt(r.sl,d)}</td>
+      <td class="hide-m" style="color:var(--buy);font-family:var(--mono)">${fmt(r.t1,d)}</td>
+      <td class="hide-m" style="color:var(--buy);font-family:var(--mono);opacity:0.7">${fmt(r.t2,d)}</td>
+      <td style="font-family:var(--mono);font-weight:600">${r.rr ? '1:'+r.rr : '—'}</td>
+      <td class="hide-m" style="font-size:11px;color:var(--grey-500)">${r.regime||'—'}</td>
+      <td class="hide-m" style="color:${r.bias_1d==='BULLISH'?'var(--buy)':r.bias_1d==='BEARISH'?'var(--sell)':'var(--grey-400)'}">${r.bias_1d||'—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+function drillDown(symbol) {
+  // Switch to analyze page and run analysis for this symbol
+  document.getElementById('symbol').value = symbol;
+  // Set type to NSE
+  setType('NSE');
+  showPage('analyze', document.getElementById('nav-analyze'));
+  analyze();
+  window.scrollTo(0, 0);
+}
+
+// Check screener status on page load
+async function initScreener() {
+  try {
+    const [statusRes, upstoxRes] = await Promise.all([
+      fetch(`${API_BASE}/screener/status`),
+      fetch(`${API_BASE}/upstox/status`)
+    ]);
+    const status = await statusRes.json();
+    const upstoxStatus = await upstoxRes.json();
+
+    if (!upstoxStatus.token_valid) {
+      document.getElementById('auth-notice').style.display = 'flex';
+    }
+
+    if (status.last_run) {
+      updateScStatus();
+      loadScreenerResults();
+    }
+
+    if (status.running) {
+      startScPoll();
+    }
+  } catch(e) {}
+}
+
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('symbol').addEventListener('keydown',e=>{if(e.key==='Enter'&&acIdx===-1)analyze();});
   document.getElementById('position-card').style.display='none';
   loadWlFromStorage();
+  initScreener();
   setType('NSE');
 });
 </script>
