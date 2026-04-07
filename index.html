@@ -1197,17 +1197,16 @@ body {
   <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:16px;">
     <div>
       <div class="page-title">Stock Screener</div>
-      <div class="page-sub">NSE/BSE stocks filtered by PRISM signal engine · 300+ liquid stocks · Auto-scans every 4 hours</div>
+      <div class="page-sub">NSE · Crypto · Forex · Metals · Energy · US Stocks · Auto-scans every 4 hours</div>
     </div>
     <button class="scan-btn" id="scan-now-btn" onclick="triggerScan()">
       <span id="scan-icon">⟳</span> Scan Now
     </button>
   </div>
 
-  <!-- Auth notice -->
+  <!-- Auth notice (hidden - using AngelOne) -->
   <div class="auth-notice" id="auth-notice" style="display:none">
-    <span class="auth-notice-text">⚠ Upstox login required to run screener</span>
-    <a href="https://api.prism-signal.in/upstox/login" target="_blank" class="auth-link">Login with Upstox →</a>
+    <span class="auth-notice-text">⚠ Connection issue detected</span>
   </div>
 
   <!-- Scan status -->
@@ -1235,11 +1234,21 @@ body {
 
   <!-- Filters -->
   <div class="screener-toolbar">
-    <span class="toolbar-label">Filter:</span>
+    <span class="toolbar-label">Category:</span>
+    <button class="toolbar-btn active" onclick="setScCategory('ALL',this)">All</button>
+    <button class="toolbar-btn" onclick="setScCategory('NSE',this)">NSE</button>
+    <button class="toolbar-btn" onclick="setScCategory('CRYPTO',this)">Crypto</button>
+    <button class="toolbar-btn" onclick="setScCategory('FOREX',this)">Forex</button>
+    <button class="toolbar-btn" onclick="setScCategory('METALS',this)">Metals</button>
+    <button class="toolbar-btn" onclick="setScCategory('ENERGY',this)">Energy</button>
+    <button class="toolbar-btn" onclick="setScCategory('US',this)">US Stocks</button>
+  </div>
+  <div class="screener-toolbar" style="margin-top:8px">
+    <span class="toolbar-label">Signal:</span>
     <button class="toolbar-btn active" onclick="setScFilter('ALL',this)">All</button>
     <button class="toolbar-btn" onclick="setScFilter('BUY',this)">Buy Only</button>
     <button class="toolbar-btn" onclick="setScFilter('SELL',this)">Sell Only</button>
-    <button class="toolbar-btn" onclick="setScFilter('HIGH',this)">High Conviction (7+)</button>
+    <button class="toolbar-btn" onclick="setScFilter('HIGH',this)">High Conviction (6+)</button>
     <span class="toolbar-label" style="margin-left:8px">Sort:</span>
     <button class="toolbar-btn active" onclick="setScSort('conviction',this)">Conviction</button>
     <button class="toolbar-btn" onclick="setScSort('rr',this)">R:R Ratio</button>
@@ -1257,6 +1266,7 @@ body {
       <thead>
         <tr>
           <th>Symbol</th>
+          <th class="hide-m">Type</th>
           <th>LTP</th>
           <th>Verdict</th>
           <th>Conviction</th>
@@ -1265,8 +1275,8 @@ body {
           <th class="hide-m">Target 1</th>
           <th class="hide-m">Target 2</th>
           <th>R:R</th>
+          <th class="hide-m">Futures</th>
           <th class="hide-m">Regime</th>
-          <th class="hide-m">Bias</th>
         </tr>
       </thead>
       <tbody id="sc-tbody"></tbody>
@@ -1921,15 +1931,25 @@ setInterval(()=>{if(document.getElementById('page-history').classList.contains('
 
 
 /* ── SCREENER ── */
-let scFilter = 'ALL', scSort = 'conviction', scResults = [], scPollTimer = null;
+let scFilter = 'ALL', scCategory = 'ALL', scSort = 'conviction', scResults = [], scPollTimer = null;
 
 function setScFilter(f, btn) {
   scFilter = f;
   document.querySelectorAll('.screener-toolbar .toolbar-btn').forEach(b => {
-    if (['All','Buy Only','Sell Only','High Conviction (7+)'].includes(b.textContent))
+    if (['All','Buy Only','Sell Only','High Conviction (6+)'].includes(b.textContent))
       b.className = 'toolbar-btn';
   });
   btn.className = 'toolbar-btn ' + (f==='BUY'?'buy-active':f==='SELL'?'sell-active':f==='HIGH'?'high-active':'active');
+  renderScreener();
+}
+
+function setScCategory(c, btn) {
+  scCategory = c;
+  document.querySelectorAll('.screener-toolbar .toolbar-btn').forEach(b => {
+    if (['All','NSE','Crypto','Forex','Metals','Energy','US Stocks'].includes(b.textContent))
+      b.className = 'toolbar-btn';
+  });
+  btn.className = 'toolbar-btn active';
   renderScreener();
 }
 
@@ -2036,10 +2056,13 @@ async function loadScreenerResults() {
 function renderScreener() {
   let results = [...scResults];
 
-  // Filter
+  // Category filter
+  if (scCategory !== 'ALL') results = results.filter(r => r.instrument_type === scCategory);
+
+  // Signal filter
   if (scFilter === 'BUY')  results = results.filter(r => r.verdict === 'BUY');
   if (scFilter === 'SELL') results = results.filter(r => r.verdict === 'SELL');
-  if (scFilter === 'HIGH') results = results.filter(r => r.conviction_score >= 7);
+  if (scFilter === 'HIGH') results = results.filter(r => r.conviction_score >= 6);
 
   // Sort
   if (scSort === 'conviction') results.sort((a,b) => b.conviction_score - a.conviction_score);
@@ -2067,8 +2090,26 @@ function renderScreener() {
     const cl  = r.conviction_score >= 7 ? 'high' : r.conviction_score >= 4 ? 'moderate' : 'low';
     const pct = Math.round(r.conviction_score * 10);
 
-    return `<tr onclick="drillDown('${r.symbol}')">
+    // Futures cell
+    let futCell = '—';
+    if (r.futures) {
+      const f = r.futures;
+      const fd = f.entry < 10 ? 4 : f.entry < 1000 ? 2 : 0;
+      const dirColor = f.direction==='LONG' ? 'var(--buy)' : 'var(--sell)';
+      futCell = `<div style="font-size:10px;line-height:1.6">
+        <span style="font-weight:700;color:${dirColor}">${f.direction} FUT</span>
+        <span style="color:var(--grey-400);font-family:var(--mono)"> · Lot: ${f.lot_size}</span><br>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--grey-500)">Margin: ≈${fmt(f.margin_approx,0)}</span>
+      </div>`;
+    }
+
+    // Type badge
+    const typeColors = {NSE:'var(--accent)',CRYPTO:'#f59e0b',FOREX:'#8b5cf6',METALS:'#d97706',ENERGY:'#dc2626',US:'#0891b2'};
+    const typeColor = typeColors[r.instrument_type] || 'var(--grey-400)';
+
+    return `<tr onclick="drillDown('${r.symbol}','${r.instrument_type}')">
       <td><div class="sym-cell"><span class="sym-name">${r.symbol}</span><span class="sym-sub">${r.regime||''}</span></div></td>
+      <td class="hide-m"><span style="font-size:9px;font-weight:700;color:${typeColor};font-family:var(--mono)">${r.instrument_type||'—'}</span></td>
       <td style="font-family:var(--mono);font-weight:500">${fmt(r.ltp,d)}</td>
       <td><span class="v-badge ${vc}">${vl}</span></td>
       <td>
@@ -2082,17 +2123,17 @@ function renderScreener() {
       <td class="hide-m" style="color:var(--buy);font-family:var(--mono)">${fmt(r.t1,d)}</td>
       <td class="hide-m" style="color:var(--buy);font-family:var(--mono);opacity:0.7">${fmt(r.t2,d)}</td>
       <td style="font-family:var(--mono);font-weight:600">${r.rr ? '1:'+r.rr : '—'}</td>
+      <td class="hide-m">${futCell}</td>
       <td class="hide-m" style="font-size:11px;color:var(--grey-500)">${r.regime||'—'}</td>
-      <td class="hide-m" style="color:${r.bias_1d==='BULLISH'?'var(--buy)':r.bias_1d==='BEARISH'?'var(--sell)':'var(--grey-400)'}">${r.bias_1d||'—'}</td>
     </tr>`;
   }).join('');
 }
 
-function drillDown(symbol) {
-  // Switch to analyze page and run analysis for this symbol
+function drillDown(symbol, instType) {
   document.getElementById('symbol').value = symbol;
-  // Set type to NSE
-  setType('NSE');
+  // Map instrument type to tab
+  const typeMap = {NSE:'NSE', CRYPTO:'CRYPTO', FOREX:'FOREX', METALS:'FOREX', ENERGY:'FOREX', US:'FOREX'};
+  setType(typeMap[instType] || 'NSE');
   showPage('analyze', document.getElementById('nav-analyze'));
   analyze();
   window.scrollTo(0, 0);
