@@ -1050,6 +1050,35 @@ body {
 .screener-empty-icon{font-size:36px;margin-bottom:12px;}
 .screener-empty-title{font-family:var(--serif);font-size:20px;color:var(--grey-700);margin-bottom:6px;}
 .screener-empty-sub{font-size:13px;color:var(--grey-400);}
+
+/* ══════════════════════════════════════
+   SETTINGS PAGE
+   ══════════════════════════════════════ */
+.settings-section{background:var(--white);border:1px solid var(--grey-200);border-radius:var(--radius-lg);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-sm);}
+.settings-section-title{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--grey-400);margin-bottom:14px;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+.settings-label{font-size:13px;font-weight:500;color:var(--grey-700);}
+.settings-sub{font-size:11px;color:var(--grey-400);margin-top:2px;}
+.settings-input{width:100%;background:var(--grey-50);border:1px solid var(--grey-200);border-radius:var(--radius);padding:10px 14px;font-family:var(--mono);font-size:13px;color:var(--grey-800);outline:none;margin-top:6px;box-sizing:border-box;}
+.settings-input:focus{border-color:var(--accent);}
+.settings-select{background:var(--grey-50);border:1px solid var(--grey-200);border-radius:var(--radius);padding:8px 12px;font-family:var(--sans);font-size:13px;color:var(--grey-700);outline:none;}
+.settings-select:focus{border-color:var(--accent);}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-slider{position:absolute;inset:0;background:var(--grey-200);border-radius:24px;cursor:pointer;transition:background 0.2s;}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle input:checked+.toggle-slider{background:var(--accent);}
+.toggle input:checked+.toggle-slider:before{transform:translateX(20px);}
+.tg-status-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--mono);padding:5px 12px;border-radius:20px;margin-top:14px;}
+.tg-status-badge.ok{background:var(--buy-bg);color:var(--buy);border:1px solid var(--buy-border);}
+.tg-status-badge.err{background:var(--sell-bg);color:var(--sell);border:1px solid var(--sell-border);}
+.tg-status-badge.info{background:var(--grey-50);color:var(--grey-500);border:1px solid var(--grey-200);}
+.settings-btn{background:var(--accent);color:white;border:none;border-radius:var(--radius);padding:10px 20px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;}
+.settings-btn:hover{opacity:0.88;}
+.settings-btn.secondary{background:var(--grey-100);color:var(--grey-600);}
+.settings-btn.secondary:hover{background:var(--grey-200);}
+.settings-hint{font-size:11px;color:var(--grey-500);line-height:1.7;margin-top:18px;padding:14px;background:var(--grey-50);border-radius:var(--radius);border:1px solid var(--grey-100);}
+.settings-hint code{font-family:var(--mono);font-size:10px;background:var(--grey-100);padding:2px 5px;border-radius:3px;}
 </style>
 </head>
 <body>
@@ -1066,6 +1095,7 @@ body {
     <button class="nav-link"        id="nav-watchlist" onclick="showPage('watchlist',this)">Watchlist</button>
     <button class="nav-link"        id="nav-trades"    onclick="showPage('trades',this)">Trades</button>
     <button class="nav-link"        id="nav-history"   onclick="showPage('history',this)">History</button>
+    <button class="nav-link"        id="nav-settings"  onclick="showPage('settings',this)">Notify</button>
   </div>
 </nav>
 
@@ -1437,6 +1467,81 @@ body {
 </div>
 </div>
 
+<!-- ══ SETTINGS / NOTIFICATIONS ══ -->
+<div class="page" id="page-settings">
+<div class="container">
+  <div class="page-header">
+    <div class="page-title">Notifications</div>
+    <div class="page-sub">Telegram alerts for high conviction signals · No GitHub Actions needed</div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-section-title">Telegram Alerts</div>
+
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Enable Telegram Notifications</div>
+        <div class="settings-sub">Alerts fire from your browser when the screener finds new signals</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="tg-enabled" onchange="saveTgSettings()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div>
+      <div class="settings-section-title" style="margin-bottom:4px">Bot Token</div>
+      <input type="text" class="settings-input" id="tg-token"
+        placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
+        oninput="saveTgSettings()">
+    </div>
+
+    <div style="margin-top:14px">
+      <div class="settings-section-title" style="margin-bottom:4px">Chat ID</div>
+      <input type="text" class="settings-input" id="tg-chatid"
+        placeholder="-1001234567890  (group) or 123456789 (personal)"
+        oninput="saveTgSettings()">
+    </div>
+
+    <div style="margin-top:16px;display:flex;gap:16px;flex-wrap:wrap">
+      <div>
+        <div class="settings-section-title" style="margin-bottom:4px">Min Conviction</div>
+        <select class="settings-select" id="tg-minconv" onchange="saveTgSettings()">
+          <option value="5">5+ / 10</option>
+          <option value="6" selected>6+ / 10</option>
+          <option value="7">7+ / 10</option>
+          <option value="8">8+ / 10</option>
+        </select>
+      </div>
+      <div>
+        <div class="settings-section-title" style="margin-bottom:4px">Signal Filter</div>
+        <select class="settings-select" id="tg-sigfilter" onchange="saveTgSettings()">
+          <option value="ALL">All signals</option>
+          <option value="BUY">Buy only</option>
+          <option value="SELL">Sell only</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap">
+      <button class="settings-btn" onclick="testTelegram()">Send Test Message</button>
+      <button class="settings-btn secondary" onclick="saveTgSettings();showTradeNotification('Settings saved')">Save</button>
+    </div>
+    <div id="tg-status-msg"></div>
+
+    <div class="settings-hint">
+      <strong>How to set up (one-time, 2 minutes):</strong><br>
+      1. Open Telegram → search <code>@BotFather</code> → send <code>/newbot</code> → copy the token above<br>
+      2. Message your new bot (or add it to a group), then open:<br>
+      &nbsp;&nbsp;<code>https://api.telegram.org/bot&lt;YOUR_TOKEN&gt;/getUpdates</code><br>
+      &nbsp;&nbsp;and copy the <code>chat.id</code> value above<br>
+      3. Enable the toggle, save, and click <b>Send Test Message</b><br>
+      4. Keep this browser tab open — alerts fire automatically when the screener detects new signals (auto-scan every 4 h)
+    </div>
+  </div>
+</div>
+</div>
+
 <script>
 const API_BASE = "https://api.prism-signal.in";
 
@@ -1575,6 +1680,7 @@ function showPage(name,btn){
   if(name==='watchlist') renderWl();
   if(name==='screener') initScreener();
   if(name==='trades') loadTrades();
+  if(name==='settings') loadTgSettings();
 }
 
 /* ── TYPE ── */
@@ -2293,6 +2399,7 @@ async function loadScreenerResults() {
     document.getElementById('sc-high').textContent   = highConv;
 
     renderScreener();
+    notifyNewScreenerResults(scResults, s.last_run || null);
   } catch(e) {}
 }
 
@@ -2402,11 +2509,105 @@ async function initScreener() {
   } catch(e) {}
 }
 
+/* ── TELEGRAM NOTIFICATIONS ── */
+let tgSettings = { enabled: false, token: '', chatId: '', minConv: 6, sigFilter: 'ALL' };
+let lastNotifiedScanTime = localStorage.getItem('prism_last_notified_scan') || null;
+let lastKnownScanTime = null;
+
+function loadTgSettings() {
+  const saved = JSON.parse(localStorage.getItem('prism_tg_settings') || 'null');
+  if (saved) tgSettings = { ...tgSettings, ...saved };
+  document.getElementById('tg-enabled').checked = tgSettings.enabled;
+  document.getElementById('tg-token').value    = tgSettings.token || '';
+  document.getElementById('tg-chatid').value   = tgSettings.chatId || '';
+  document.getElementById('tg-minconv').value  = tgSettings.minConv || 6;
+  document.getElementById('tg-sigfilter').value = tgSettings.sigFilter || 'ALL';
+}
+
+function saveTgSettings() {
+  tgSettings = {
+    enabled:   document.getElementById('tg-enabled').checked,
+    token:     document.getElementById('tg-token').value.trim(),
+    chatId:    document.getElementById('tg-chatid').value.trim(),
+    minConv:   parseInt(document.getElementById('tg-minconv').value) || 6,
+    sigFilter: document.getElementById('tg-sigfilter').value
+  };
+  localStorage.setItem('prism_tg_settings', JSON.stringify(tgSettings));
+}
+
+async function sendTelegramMessage(text) {
+  if (!tgSettings.token || !tgSettings.chatId) return false;
+  try {
+    const res = await fetch(`https://api.telegram.org/bot${tgSettings.token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: tgSettings.chatId, text, parse_mode: 'HTML' })
+    });
+    const data = await res.json();
+    return data.ok === true;
+  } catch(e) { return false; }
+}
+
+async function testTelegram() {
+  saveTgSettings();
+  const statusEl = document.getElementById('tg-status-msg');
+  if (!tgSettings.token || !tgSettings.chatId) {
+    statusEl.innerHTML = '<div class="tg-status-badge err">Enter Bot Token and Chat ID first</div>';
+    return;
+  }
+  statusEl.innerHTML = '<div class="tg-status-badge info">Sending...</div>';
+  const ok = await sendTelegramMessage('✅ <b>Prism</b> — Test notification working!\n\nYou will receive alerts when the screener finds high conviction signals.');
+  statusEl.innerHTML = ok
+    ? '<div class="tg-status-badge ok">✓ Test message sent</div>'
+    : '<div class="tg-status-badge err">✗ Failed — check token and chat ID</div>';
+}
+
+async function notifyNewScreenerResults(results, scanTime) {
+  if (!tgSettings.enabled || !tgSettings.token || !tgSettings.chatId) return;
+  if (scanTime && scanTime === lastNotifiedScanTime) return;
+
+  let filtered = results.filter(r => r.conviction_score >= tgSettings.minConv);
+  if (tgSettings.sigFilter === 'BUY')  filtered = filtered.filter(r => r.verdict === 'BUY');
+  if (tgSettings.sigFilter === 'SELL') filtered = filtered.filter(r => r.verdict === 'SELL');
+  if (filtered.length === 0) return;
+
+  const lines = filtered.slice(0, 15).map(r => {
+    const icon = r.verdict === 'BUY' ? '🟢' : '🔴';
+    const rr   = r.rr ? ` · R:R 1:${r.rr}` : '';
+    return `${icon} <b>${r.symbol}</b> [${r.instrument_type}] ${r.verdict} · ${r.conviction_score}/10${rr}`;
+  }).join('\n');
+
+  const extra = filtered.length > 15 ? `\n<i>+${filtered.length - 15} more signals</i>` : '';
+  const dt  = new Date(scanTime || Date.now()).toLocaleString('en-IN', { hour12: true });
+  const msg = `📡 <b>Prism — ${filtered.length} Signal${filtered.length > 1 ? 's' : ''}</b>\n<i>${dt}</i>\n\n${lines}${extra}`;
+
+  const ok = await sendTelegramMessage(msg);
+  if (ok && scanTime) {
+    lastNotifiedScanTime = scanTime;
+    localStorage.setItem('prism_last_notified_scan', scanTime);
+  }
+}
+
+// Poll screener status every 5 min to catch auto-scans even when Screener tab is not open
+setInterval(async () => {
+  try {
+    const res = await fetch(`${API_BASE}/screener/status`);
+    const s   = await res.json();
+    if (s.last_run && s.last_run !== lastKnownScanTime && !s.running) {
+      lastKnownScanTime = s.last_run;
+      const rRes = await fetch(`${API_BASE}/screener/results?limit=300`);
+      const rData = await rRes.json();
+      notifyNewScreenerResults(rData.results || [], s.last_run);
+    }
+  } catch(e) {}
+}, 5 * 60 * 1000);
+
 /* ── INIT ── */
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('symbol').addEventListener('keydown',e=>{if(e.key==='Enter'&&acIdx===-1)analyze();});
   document.getElementById('position-card').style.display='none';
   loadWlFromStorage();
+  loadTgSettings();
   initScreener();
   setType('NSE');
 });
